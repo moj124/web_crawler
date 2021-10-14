@@ -5,8 +5,8 @@ from collections import deque
 from urllib.parse import urlsplit
 import requests
 import sys
-import os
 import argparse
+import json
 from bs4 import BeautifulSoup
 
 class Crawler():
@@ -80,6 +80,8 @@ def main(argv):
                         default='https://www.bbc.co.uk/', help='the starting webpage that the crawler will extract urls from')
     parser.add_argument('--threads','-n', type=int, default=3,
                         help='number of threads being used asynchronously')
+    parser.add_argument('--savetofile','-s', type=bool, default=True,
+                        help='save local link relations to json file')
     opt = parser.parse_args()
     print(opt)
     web_crawler = Crawler(opt.webpage)
@@ -94,6 +96,13 @@ def main(argv):
     print(web_crawler.broken_links)
     print()
     print(web_crawler.output)
+
+    if opt.savetofile:
+        parts = urlsplit(opt.webpage)
+        base = "{0.netloc}".format(parts)
+        strip_base = base.replace("www.", "")
+        with open(strip_base+'.json', 'w') as f:
+            json.dump(web_crawler.output, f)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
