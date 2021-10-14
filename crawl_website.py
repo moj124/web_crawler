@@ -4,6 +4,9 @@ import gevent
 from collections import deque 
 from urllib.parse import urlsplit
 import requests
+import sys
+import os
+import argparse
 from bs4 import BeautifulSoup
 
 class Crawler():
@@ -59,27 +62,39 @@ class Crawler():
             self.foreign_links.add(anchor)
         
         for i in self.local_links:    
-          if not i in self.queue and not i in self.visited:          self.queue.append(i)
-        self.output[url] = list(set(self.output[url]))
+          if not i in self.queue and not i in self.visited:          
+            self.queue.append(i)
+            self.output[url] = list(set(self.output[url]))
     except Exception as e:
       print(e)
 
-  def run(self,numThreads=3):
+  def run(self,numThreads):
     # while self.queue:
       threads = [gevent.spawn(self.get_links) for i in range(numThreads)]
       gevent.joinall(threads)
 
-url = "https://www.traackr.com/"
-web_crawler = Crawler(url)
-web_crawler.run(1000)
-print()
-print(web_crawler.visited)
-print()
-print(web_crawler.local_links)
-print()
-print(web_crawler.foreign_links)
-print()
-print(web_crawler.broken_links)
-print()
-print(web_crawler.output)
+
+def main(argv):
+    parser = argparse.ArgumentParser('The web_crawler is a asynchoronous gevent link crawler that maps all the associated local links constrained by the input webpage url.')
+    parser.add_argument('--webpage','-l', type=str,
+                        default='https://www.bbc.co.uk/', help='the starting webpage that the crawler will extract urls from')
+    parser.add_argument('--threads','-n', type=int, default=3,
+                        help='number of threads being used asynchronously')
+    opt = parser.parse_args()
+    print(opt)
+    web_crawler = Crawler(opt.webpage)
+    web_crawler.run(opt.threads)
+    print()
+    print(web_crawler.visited)
+    print()
+    print(web_crawler.local_links)
+    print()
+    print(web_crawler.foreign_links)
+    print()
+    print(web_crawler.broken_links)
+    print()
+    print(web_crawler.output)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
 

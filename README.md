@@ -36,9 +36,9 @@ pip3 install -r requirements.txt
 
 ### Run default settings with 'bbc.co.uk'
 ```cmd
-python3 crawl_website.py -l https://webscrapethissite.org
+python3 crawl_website.py
 ```
 ### Run with custom options
 ```cmd
-python3 crawl_website.py -l https://webscrapethissite.org
+python3 crawl_website.py -l https://webscrapethissite.org -n 10
 ```
