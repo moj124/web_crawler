@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 
 class Crawler():
   def __init__(self,current_page):
+    self.header= {'User-Agent': 'Mozilla/5.0'}
     self.current_page = current_page
     self.visited = set()
     self.local_links = set()
@@ -26,6 +27,13 @@ class Crawler():
         self.output[url] = []
         self.visited.add(url)
         print("Processing %s" % url)
+
+        try:
+            response = requests.head(url)
+        except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError, requests.exceptions.InvalidURL, requests.exceptions.InvalidSchema):
+            # add broken urls to it's own set, then continue
+            self.broken_links.add(url)
+            continue
         try:
           req = requests.get(url)
         except:
@@ -39,8 +47,12 @@ class Crawler():
         base_url = "{0.scheme}://{0.netloc}".format(parts)
         path = url[:url.rfind('/')+1] if '/' in parts.path else url
 
+        try:
+          soup = BeautifulSoup(req.content, 'html.parser')
+        except:
+          self.broken_links.add(url)
+          continue
 
-        soup = BeautifulSoup(req.content, 'html.parser')
         # extract link url from the anchor    
         for link in soup.find_all('a'): 
           anchor = link.attrs["href"] if "href" in link.attrs else ''

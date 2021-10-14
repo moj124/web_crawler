@@ -15,7 +15,7 @@ The web_crawler is a asynchoronous gevent link crawler that maps all the associa
     - gevent
   
 - **Python Version Tested**
-  - 3.8.2
+  - 3.7.10
 
 ## Setup
 
