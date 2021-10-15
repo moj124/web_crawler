@@ -1,5 +1,5 @@
 import pytest
-from crawl_website import Crawler
+from ..crawl_website import Crawler
 
 @pytest.fixture
 def starting_queue():

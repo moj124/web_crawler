@@ -8,6 +8,7 @@ The web_crawler is a asynchoronous gevent link crawler that maps all the associa
 - [Run Script](#run-script-(linux))
     -   [Run Default with 'bbc.co.uk'](#run-default-settings-with-'bbc.co.uk')
     -   [Run with custom options](#run-with-custom-options)
+- [Testing](#testing)
 ## Requirements
 - **Dependencies** (included in requirements.txt)
     - bs4
@@ -41,4 +42,10 @@ python3 crawl_website.py
 ### Run with custom options
 ```cmd
 python3 crawl_website.py -l https://webscrapethissite.org -n 10
+```
+## Testing
+```cmd
+pytest test/
+<!-- or -->
+pytest -v test
 ```
