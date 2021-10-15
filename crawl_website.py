@@ -1,7 +1,7 @@
 from gevent import monkey
 monkey.patch_all()
 import gevent
-from collections import deque 
+import random 
 from urllib.parse import urlsplit
 import requests
 import sys
@@ -18,14 +18,25 @@ class Crawler():
     self.foreign_links = set()
     self.broken_links = set()
     self.output = {}
-    self.queue = deque([self.current_page])
+    self.queue = [self.current_page]
+  
+  def get_next_link(self):
+    if not self.queue:
+      return None
+    selected_index = random.choice(range(len(self.queue)))
+    selected_link = self.queue[selected_index]
+    del self.queue[selected_index]
+    return selected_link
 
   def get_links(self):
     try:
       while self.queue:
-        url = self.queue.popleft()
-        self.output[url] = []
+        # Get a random link from the queue
+        url = self.get_next_link()
         self.visited.add(url)
+        
+        # Document parent to child link relation
+        self.output[url] = []
         print("Processing %s" % url)
 
         try:
@@ -52,6 +63,7 @@ class Crawler():
         except:
           self.broken_links.add(url)
           continue
+        # print(soup,req)
 
         # extract link url from the anchor    
         for link in soup.find_all('a'): 
