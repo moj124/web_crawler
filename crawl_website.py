@@ -208,7 +208,7 @@ def main():
                         help='save local link relations from output to json file')
     parser.add_argument('--data_directory','-d', type=str, default='data/',
                         help='directory to save the output file to')
-    parser.add_argument('--maximum_processing_time','-t', type=int, default=5,
+    parser.add_argument('--maximum_processing_time','-t', type=int, default=10,
                         help='gevent thread timeout parameter in seconds before threads is killed')
 
     # parse the terminal arguements for custom execution
