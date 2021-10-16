@@ -14,6 +14,7 @@ python3 crawl_website.py -l https://www.bbc.co.uk/ -s True
     -   [Run Default with 'bbc.co.uk'](#run-default-settings-with-'bbc.co.uk')
     -   [Run with custom options](#run-with-custom-options)
 - [Testing](#testing)
+- [Issues](#issues)
 ## Requirements
 - **Dependencies** (included in requirements.txt)
     - bs4
@@ -56,3 +57,7 @@ Or for detailed view
 ```cmd
 pytest -v test/
 ```
+##Issues
+- The web crawler is unable to handle erroneous url links that contain no body.
+- Failed HTTP GET request due to unauthorised permissions, partly due to headers.
+- Asynchronous gevent threads are causing the queue within the Crawler to be empty while spawning.
