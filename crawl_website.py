@@ -201,10 +201,10 @@ def main():
 
     # parse the terminal arguements for custom execution
     opt = parser.parse_args()
-
+    print(opt)
     # run the program with the given arguements
     web_crawler = Crawler(opt.webpage)
-    web_crawler.run(opt.maximum_threads)
+    # web_crawler.run(opt.maximum_threads)
 
     # display results
     print("%d local links were found" % len(web_crawler.local_links))
@@ -214,7 +214,7 @@ def main():
         domain_name, webpage, path = get_parts_of_url(opt.webpage)
         with open(domain_name+'.json', 'w') as f:
             json.dump(web_crawler.output, f)
-        print("Local link relations were saved to %s" % (opt.data_directory+domain_name+'.json'))
+        print("Local link relations were saved to %s" % ('./'+opt.data_directory+domain_name+'.json'))
     else:
       print("Local link relations where not written to a json file")
     print("---------------------------------------------------------") 
