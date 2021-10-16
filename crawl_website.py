@@ -205,7 +205,7 @@ def main():
     parser.add_argument('--maximum_threads','-n', type=int, default=1000,
                         help='number of threads being used asynchronously at one time')
     parser.add_argument('--savetofile','-s', type=bool, default=False,
-                        help='save local link relations to json file')
+                        help='save local link relations from output to json file')
     parser.add_argument('--data_directory','-d', type=str, default='data/',
                         help='directory to save the output file to')
     parser.add_argument('--maximum_processing_time','-t', type=int, default=5,
