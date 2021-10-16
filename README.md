@@ -3,7 +3,7 @@ The web_crawler is a asynchoronous gevent link crawler that maps all the associa
 
 PLEASE MAKE SURE YOU RUN THE FOLLOWING COMMAND FOR CORRECT EXECUTION AND SAVING OF THE LOCAL LINK RELATIONS JSON FILE TO /DATA FOLDER:
 ```cmd
-python3 crawl_website.py -l https://www.bbc.co.uk/ -s True 
+python3 crawl_website.py -l <url> -s True 
 ```
 
 - [Requirements](#requirements)
