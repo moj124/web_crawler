@@ -212,7 +212,7 @@ def main():
 
     if opt.savetofile:
         domain_name, webpage, path = get_parts_of_url(opt.webpage)
-        with open(domain_name+'.json', 'w') as f:
+        with open(opt.data_directory+domain_name+'.json', 'w') as f:
             json.dump(web_crawler.output, f)
         print("Local link relations were saved to %s" % ('./'+opt.data_directory+domain_name+'.json'))
     else:
