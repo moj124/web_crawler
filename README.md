@@ -46,6 +46,8 @@ python3 crawl_website.py -l https://webscrapethissite.org -n 10
 ## Testing
 ```cmd
 pytest test/
-<!-- or -->
-pytest -v test
+```
+Or for detailed view
+```cmd
+pytest -v test/
 ```

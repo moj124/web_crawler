@@ -169,7 +169,7 @@ def get_parts_of_url(url):
   """
   # parse url into relevant parts
   parts = urlsplit(url)
-
+  print(parts)
   # format specific sections of the url for domain_name, webpage and relative paths
   base = "{0.netloc}".format(parts)
   domain_name = base.replace("www.", "")
