@@ -1,6 +1,11 @@
 # web_crawler
 The web_crawler is a asynchoronous gevent link crawler that maps all the associated local links constrained by the input webpage url. For a website with many links such as 14,500 links expect the program to take 9 minutes to complete.
 
+PLEASE MAKE SURE YOU RUN THE FOLLOWING COMMAND FOR CORRECT EXECUTION AND SAVING OF THE LOCAL LINK RELATIONS JSON FILE TO /DATA FOLDER:
+```cmd
+python3 crawl_website.py -l https://www.bbc.co.uk/ -s True 
+```
+
 - [Requirements](#requirements)
 - [Setup](#setup)
     -   [Windows](#windows)
