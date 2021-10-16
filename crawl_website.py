@@ -72,7 +72,7 @@ class Crawler():
 
   def get_links(self):
     """ Scrapes the selected link from get_next_link webpage for other local links"""
-
+    start_time = time.time()
     try:
       # Get a random link from the queue
       try:
@@ -162,7 +162,7 @@ class Crawler():
       # spawn threads according to the queue length and defined max thread count
       threads = [spawn(self.get_links) for i in range(maximum_threads) if i+1 <= len(self.queue)]
       # await until threads finish execution
-      joinall(threads,timeout=10)
+      joinall(threads,timeout=2)
     print()
     print("--- %s seconds ---" % (time.time() - start_time))  
 
@@ -201,10 +201,9 @@ def main():
 
     # parse the terminal arguements for custom execution
     opt = parser.parse_args()
-    print(opt)
     # run the program with the given arguements
     web_crawler = Crawler(opt.webpage)
-    # web_crawler.run(opt.maximum_threads)
+    web_crawler.run(opt.maximum_threads)
 
     # display results
     print("%d local links were found" % len(web_crawler.local_links))
