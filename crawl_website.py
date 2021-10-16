@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 import random 
 import requests
 import argparse
+import sys
 import json
 import time
 
@@ -74,7 +75,10 @@ class Crawler():
 
     try:
       # Get a random link from the queue
-      url = self.get_next_link()
+      try:
+        url = self.get_next_link()
+      except None as e:
+        print("no link generated")  
       self.visited.add(url)
       
       # Document parent to child link relation
@@ -86,17 +90,20 @@ class Crawler():
       except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError, requests.exceptions.InvalidURL, requests.exceptions.InvalidSchema):
         # add broken urls to it's own set, then continue
         self.broken_links.add(url)
+        print("request failed")    
 
       try:
         req = requests.get(url)
       except:
         # add unauthorized request from website response to it's own set, then continue
         self.broken_links.add(url)
+        print("unauthorised get request")  
   
       try:
         soup = BeautifulSoup(req.content, 'html.parser')
       except:
         self.broken_links.add(url)
+        print("failed to read body")  
 
       # extract sections of url to resolve relative links
       domain_name, webpage, path = get_parts_of_url(url)
@@ -155,7 +162,7 @@ class Crawler():
       # spawn threads according to the queue length and defined max thread count
       threads = [spawn(self.get_links) for i in range(maximum_threads) if i+1 <= len(self.queue)]
       # await until threads finish execution
-      joinall(threads)
+      joinall(threads,timeout=10)
     print()
     print("--- %s seconds ---" % (time.time() - start_time))  
 
@@ -169,7 +176,7 @@ def get_parts_of_url(url):
   """
   # parse url into relevant parts
   parts = urlsplit(url)
-  print(parts)
+  # print(parts)
   # format specific sections of the url for domain_name, webpage and relative paths
   base = "{0.netloc}".format(parts)
   domain_name = base.replace("www.", "")
@@ -207,7 +214,7 @@ def main():
         domain_name, webpage, path = get_parts_of_url(opt.webpage)
         with open(domain_name+'.json', 'w') as f:
             json.dump(web_crawler.output, f)
-        print("Local link relations were saved to %s" % opt.data_directory+domain_name+'.json')
+        print("Local link relations were saved to %s" % (opt.data_directory+domain_name+'.json'))
     else:
       print("Local link relations where not written to a json file")
     print("---------------------------------------------------------") 

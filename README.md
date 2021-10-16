@@ -1,5 +1,5 @@
 # web_crawler
-The web_crawler is a asynchoronous gevent link crawler that maps all the associated local links constrained by the input webpage url. 
+The web_crawler is a asynchoronous gevent link crawler that maps all the associated local links constrained by the input webpage url. For a website with many links such as 14,500 links expect the program to take 9 minutes to complete.
 
 - [Requirements](#requirements)
 - [Setup](#setup)
