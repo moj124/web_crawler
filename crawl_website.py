@@ -3,12 +3,11 @@ monkey.patch_all()
 from bs4 import BeautifulSoup
 from urllib.parse import urlsplit
 import random 
+import validators
 import requests
 import argparse
-import sys
 import json
 import time
-
 
 class Crawler():
   """
@@ -36,14 +35,18 @@ class Crawler():
   run()
       runs get_links() asynchronously until all links from the queue are visited
   """
-  def __init__(self,current_page):
+  def __init__(self,query_webpage):
     """
       Parameters
       ----------
       current_page : string
           base webpage to search for all local links related to the base webpage's domain
     """
-    self.queue = [current_page]
+    if not(validators.url(query_webpage)): 
+      myError = ValueError('must be a valid url')
+      raise myError
+
+    self.queue = [query_webpage]
     self.visited = set()
     self.local_links = set()
     self.broken_links = set()
@@ -72,7 +75,6 @@ class Crawler():
 
   def get_links(self):
     """ Scrapes the selected link from get_next_link webpage for other local links"""
-    start_time = time.time()
     try:
       # Get a random link from the queue
       try:
@@ -144,14 +146,23 @@ class Crawler():
       # unknown error has occured
       print(e)
 
-  def run(self,maximum_threads):
-    """Runs get_links() asynchronously until all links from the queue are visited
+  def run(self,maximum_threads= 1000,maximum_timeout=5):
+    """Runs get_links() asynchronously until all links from the queue are visiteda nd raises errors in case of invalid parameters
 
     Parameters
     ----------
     maximum_threads : int
         Specifies the maxmium number of threads that can be spawned
+    maximum_timeout : int
+        Specifies the maxmium alloted time for a gevent thread to process a job
     """
+
+    if maximum_threads <= 0: 
+      myError = ValueError('maximum_threads should be a natural number')
+      raise myError
+    elif maximum_timeout <= 0:
+      myError = ValueError('maximum_timeout should be a natural number')
+      raise myError
 
     # record the time performance of the program
     start_time = time.time()
@@ -162,7 +173,7 @@ class Crawler():
       # spawn threads according to the queue length and defined max thread count
       threads = [spawn(self.get_links) for i in range(maximum_threads) if i+1 <= len(self.queue)]
       # await until threads finish execution
-      joinall(threads,timeout=2)
+      joinall(threads,timeout=maximum_timeout)
     print()
     print("--- %s seconds ---" % (time.time() - start_time))  
 
@@ -176,14 +187,13 @@ def get_parts_of_url(url):
   """
   # parse url into relevant parts
   parts = urlsplit(url)
-  # print(parts)
+
   # format specific sections of the url for domain_name, webpage and relative paths
   base = "{0.netloc}".format(parts)
   domain_name = base.replace("www.", "")
   webpage = "{0.scheme}://{0.netloc}".format(parts)
   path = url[:url.rfind('/')+1] if '/' in parts.path else url
   return (domain_name,webpage,path)
-
 
 def main():
     """Runs the web crawler asynchronously to collect data on the local links and their relations"""
@@ -193,17 +203,19 @@ def main():
     parser.add_argument('--webpage','-l', type=str,
                         default='https://www.bbc.co.uk/', help='the starting webpage that the crawler will extract urls from')
     parser.add_argument('--maximum_threads','-n', type=int, default=1000,
-                        help='number of threads being used asynchronously')
+                        help='number of threads being used asynchronously at one time')
     parser.add_argument('--savetofile','-s', type=bool, default=False,
                         help='save local link relations to json file')
     parser.add_argument('--data_directory','-d', type=str, default='data/',
-                        help='directory to save the file to')
+                        help='directory to save the output file to')
+    parser.add_argument('--maximum_processing_time','-t', type=int, default=5,
+                        help='gevent thread timeout parameter in seconds before threads is killed')
 
     # parse the terminal arguements for custom execution
     opt = parser.parse_args()
     # run the program with the given arguements
     web_crawler = Crawler(opt.webpage)
-    web_crawler.run(opt.maximum_threads)
+    web_crawler.run(opt.maximum_threads,opt.maximum_processing_time)
 
     # display results
     print("%d local links were found" % len(web_crawler.local_links))
@@ -213,7 +225,7 @@ def main():
         domain_name, webpage, path = get_parts_of_url(opt.webpage)
         with open(opt.data_directory+domain_name+'.json', 'w') as f:
             json.dump(web_crawler.output, f)
-        print("Local link relations were saved to %s" % ('./'+opt.data_directory+domain_name+'.json'))
+        print("Local link relations were saved to %s" % (opt.data_directory+domain_name+'.json'))
     else:
       print("Local link relations where not written to a json file")
     print("---------------------------------------------------------") 
