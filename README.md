@@ -16,7 +16,7 @@ python3 crawl_website.py -l <url> -s True
 - [Testing](#testing-1)
 - [Notes](#notes)
     -   [Team Work & Planning](#team-work-&-planning)
-    -   [Testing](#testing)
+    -   [Deployment Testing](#deployment-testing)
 - [Issues](#issues)
 ## Requirements
 - **Dependencies** (included in requirements.txt)
@@ -71,7 +71,7 @@ Project's [Kanban Board](https://solstice-ceres-14f.notion.site/Web-Crawler-2069
 -   Create branches in version control whereby we create multiple methods to implement or fix a feature.
 -   Peer review branches to understand what code goes into the main branch and into deployment.
 
-## Testing
+## Deployment Testing
 - Create tests for development usage to ensure correct functionality
 - Create secret tests that haven't been used in development to finally test the deployed code, ideally someone who hasn't coded the functionality within the team.
 
