@@ -13,7 +13,7 @@ python3 crawl_website.py -l <url> -s True
 - [Run Script](#run-script-(linux))
     -   [Run Default with 'bbc.co.uk'](#run-default-settings-with-'bbc.co.uk')
     -   [Run with custom options](#run-with-custom-options)
-- [Testing](#testing)
+- [Testing](#testing-1)
 - [Notes](#notes)
     -   [Team Work & Planning](#team-work-&-planning)
     -   [Testing](#testing)
