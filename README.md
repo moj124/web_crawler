@@ -15,6 +15,8 @@ python3 crawl_website.py -l <url> -s True
     -   [Run with custom options](#run-with-custom-options)
 - [Testing](#testing)
 - [Notes](#notes)
+    -   [Team Work & Planning](#team-work-&-planning)
+    -   [Testing](#testing)
 - [Issues](#issues)
 ## Requirements
 - **Dependencies** (included in requirements.txt)
